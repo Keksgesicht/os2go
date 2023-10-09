@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# set hostname
+echo 'cookiethinker' | $AUTH tee /etc/hostname
+
+# hosts
+cat << 'EOF' | $AUTH tee -a /etc/hosts
+# Router
+192.168.178.1   fritz.box
+
+# TUDa B.Sc. Informatik Thesis bei ESA
+10.5.0.38       gitlab.esa.informatik.tu-darmstadt.de
+EOF

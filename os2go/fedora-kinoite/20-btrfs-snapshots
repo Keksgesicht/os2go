@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# add new mountpoint
+ROOT_UUID=$(awk '/subvol=root/ {print $1}' /etc/fstab)
+$AUTH sed -i '/\/mnt\/cache/d' /etc/fstab
+echo -e "${ROOT_UUID}\t/mnt/cache\tbtrfs\tsubvol=/\t0\t0" | $AUTH tee -a /etc/fstab
+$AUTH systemctl daemon-reload
+$AUTH mkdir -p /mnt/cache
+$AUTH mount /mnt/cache
+
+# set new config
+$AUTH sed -i 's|^hourly=.*$|hourly=0|'									/etc/unCookie/cfg/backup/snapshot/cache
+$AUTH sed -i 's|^daily=.*$|daily=7|'									/etc/unCookie/cfg/backup/snapshot/cache
+$AUTH sed -i 's|^weekly=.*$|weekly=3|'									/etc/unCookie/cfg/backup/snapshot/cache
+$AUTH sed -i 's|^monthly=.*$|monthly=0|'								/etc/unCookie/cfg/backup/snapshot/cache
+$AUTH sed -i 's|^shares=.*$|shares="home host-boot host-etc root var"|'	/etc/unCookie/cfg/backup/snapshot/cache
+
+# add backup directory
+$AUTH mkdir -p /mnt/cache/backup_cache/date
+$AUTH mkdir -p /mnt/cache/backup_cache/name/home
+$AUTH mkdir -p /mnt/cache/backup_cache/name/host-boot
+$AUTH mkdir -p /mnt/cache/backup_cache/name/host-etc
+$AUTH mkdir -p /mnt/cache/backup_cache/name/root
+$AUTH mkdir -p /mnt/cache/backup_cache/name/var
+# create subvolumes
+$AUTH btrfs subvolume create /mnt/cache/host-boot
+$AUTH btrfs subvolume create /mnt/cache/host-etc
+# add backup symlinks
+$AUTH ln -srv /mnt/cache/backup_cache/name/home			/mnt/cache/home/.backup
+$AUTH ln -srv /mnt/cache/backup_cache/name/host-boot	/mnt/cache/host-boot/.backup
+$AUTH ln -srv /mnt/cache/backup_cache/name/host-etc		/mnt/cache/host-etc/.backup
+$AUTH ln -srv /mnt/cache/backup_cache/name/root			/mnt/cache/root/.backup
+$AUTH ln -srv /mnt/cache/backup_cache/name/var			/mnt/cache/var/.backup
+
+# enable units
+$AUTH ln -srv /etc/unCookie/systemd/backup-hourly@.service		/etc/systemd/system/
+$AUTH ln -srv /etc/unCookie/systemd/backup-hourly@.timer		/etc/systemd/system/
+$AUTH ln -srv /etc/unCookie/systemd/backup_snapshot@.service	/etc/systemd/system/
+$AUTH ln -srv /etc/unCookie/systemd/backup_snapshot@.timer		/etc/systemd/system/
+$AUTH systemctl enable --now "backup-hourly@cache.timer"
+$AUTH systemctl enable --now "backup_snapshot@cache.timer"

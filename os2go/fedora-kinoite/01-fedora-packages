@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# bring the system to the newest version after installation
+rpm-ostree upgrade
+
+# install essential tools
+rpm-ostree install \
+	zsh zsh-autosuggestions zsh-syntax-highlighting \
+	bat dnf dos2unix entr exa htop neofetch tldr \
+	kalendar kate pavucontrol pulseaudio-utils \
+	podman-docker wireguard-tools \
+	lm_sensors libatomic
+
+# use flatpak version instead
+rpm-ostree override remove \
+	okular okular-libs okular-part \
+	firefox firefox-langpacks
+
+# PDF presenter
+$AUTH dnf copr enable cimbali/pympress
+rpm-ostree install python3-pympress

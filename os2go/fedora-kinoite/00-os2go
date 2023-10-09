@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(realpath $0))
+source ${SCRIPT_DIR}/XX-environment/base-variables
+
+
+# check if rsync deamon works
+rsync --list-only ${DIR_BACKUP}
+
+# copy scripts
+mkdir -p ${HOME}/.local/bin/os2go/
+rsync ${RSYNC_FLAGS} --delete \
+	${DIR_HOME}/.local/bin/os2go/ \
+	${HOME}/.local/bin/os2go/

@@ -1,0 +1,10 @@
+- *.log
+- /.ld.so/***
+- /cache/**
+- /config/*/*/Greaselion/Temp/**
+- /config/*/*Cache*/**
+- /config/*/*/*Cache*/**
+- /config/*/*/Default/*Cookies*
+- /config/Ferdium/.org.chromium.Chromium.*
+- /config/Ferdium/Partitions/*/**
+- /config/Nextcloud/cookies0.db

@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+SCRIPT_DIR=$(dirname $(realpath $0))
+source ${SCRIPT_DIR}/XX-environment/luks-setup
+
+
+# create keyfile
+umask 177
+mkdir -p -m 600 $(dirname ${keyfile})
+dd if=/dev/urandom of=${keyfile} iflag=fullblock bs=512 count=4
+
+# replace password with keyfile
+cryptsetup luksAddKey ${luks_device} ${keyfile}
+
+# create a recovery key
+systemd-cryptenroll --recovery-key --unlock-key-file=${keyfile} ${luks_device}
+
+# enroll key to TPM 2.0
+systemd-cryptenroll --tpm2-device=auto --tpm2-with-pin=true --tpm2-pcrs="0+1+2+3+5+6+7" --unlock-key-file=${keyfile} ${luks_device}
+
+# modify crypttab
+luks_device_uuid=$(find -L /dev/disk/by-uuid -samefile ${luks_device} | awk -F'/' '{print $NF}')
+echo -e "${luks_name} UUID=${luks_device_uuid} none tpm2-device=auto" | tee /etc/crypttab
+
+# include new crypttab and tpm2 tools in initramfs
+rpm-ostree initramfs --enable --arg=--force-add --arg=tpm2-tss --arg=-I --arg=/etc/crypttab

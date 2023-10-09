@@ -1,0 +1,10 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(realpath $0))
+source ${SCRIPT_DIR}/XX-environment/base-variables
+
+
+# copy system config
+$AUTH rsync ${RSYNC_FLAGS} \
+	--include-from="${RSYNC_PATTERN_DIR}/etc" \
+	${DIR_ETC}/ /etc/

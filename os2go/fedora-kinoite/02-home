@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(realpath $0))
+source ${SCRIPT_DIR}/XX-environment/base-variables
+
+
+# container build files
+rsync ${RSYNC_FLAGS} --delete \
+	--include-from="${RSYNC_PATTERN_DIR}/home" \
+	${DIR_HOME}/ ${HOME}/
+
+### root home folder?!
+${AUTH} rsync ${RSYNC_FLAGS} --delete \
+	--include-from="${RSYNC_PATTERN_DIR}/home" \
+	${DIR_BACKUP}/var/roothome/ /root/

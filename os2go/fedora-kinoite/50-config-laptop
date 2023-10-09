@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# All Panels to Laptop Screen
+#sed -i 's/^lastScreen=[0-9]*$/lastScreen=0/g' ${HOME}/.config/plasma-org.kde.plasma.desktop-appletsrc
+
+# Window Rules
+sed -i 's|^count=.*$|count=4|'												${HOME}/.config/kwinrulesrc
+sed -i 's|^rules=.*$|rules=8,9,10,02e4fcd6-c32d-4ab0-bb4b-09ff5daa919c|'	${HOME}/.config/kwinrulesrc
+
+# Autostart
+SET_AUTOSTART='copyq|nextcloud|kclock'
+rm -v $(realpath ${HOME}/.config/autostart/* | grep -Ev "${SET_AUTOSTART}")
+
+# Audio
+sed -i 's|^#=#||g'		${HOME}/.local/bin/audio/init-audio.sh
+sed -i '/ferdium/d'		${HOME}/.local/bin/audio/init-audio.sh
+sed -i '/unmute/,+4d'	${HOME}/.local/bin/audio/relink-virtual-devices.sh
+sed -i 's/out_mute_list="hdmi"/out_mute_list="alsa|hdmi"/'	${HOME}/.local/bin/audio/relink-virtual-devices.sh
+#rm ${HOME}/.local/bin/audio/vban-gaming.sh
+
+# Turn off NumLock
+sed -i 's|^NumLock=.*$|NumLock=1|'	${HOME}/.config/kcminputrc
+
+# Screen Locking and Energy Saving
+sed -i 's|^Timeout=.*$|Timeout=3|'	${HOME}/.config/kscreenlockerrc

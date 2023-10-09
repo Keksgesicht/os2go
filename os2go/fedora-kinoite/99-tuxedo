@@ -1,0 +1,6 @@
+#!/bin/bash
+
+$AUTH dnf copr enable kallepm/tuxedo-control-center
+$AUTH dnf copr enable kallepm/tuxedo-keyboard
+
+rpm-ostree install tuxedo-control-center

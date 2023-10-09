@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# enable and start services
+$AUTH systemctl enable --now \
+	rasdaemon.service \
+	smartd.service \
+	systemd-timesyncd.service
+
+# Log configuration
+$AUTH sed -i 's|^\#SystemMaxUse=.*$|SystemMaxUse=4G|'		/etc/systemd/journald.conf
+$AUTH sed -i 's|^\#SystemKeepFree=.*$|SystemKeepFree=8G|'	/etc/systemd/journald.conf
+$AUTH sed -i 's|^\#SystemMaxFiles=.*$|SystemMaxFiles=64|'	/etc/systemd/journald.conf
+
+# make necessary services findable for systemd (through linking)
+$AUTH ln -srv	/etc/unCookie/systemd/unCookie-cleanup.service	/etc/systemd/system/unCookie-cleanup.service
+$AUTH ln -srv	/etc/unCookie/systemd/unCookie-cleanup.timer	/etc/systemd/system/unCookie-cleanup.timer
+
+# enable autostart of these services
+$AUTH systemctl enable /etc/systemd/system/unCookie-cleanup.timer

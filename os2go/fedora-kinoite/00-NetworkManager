@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(realpath $0))
+source ${SCRIPT_DIR}/XX-environment/base-variables
+
+
+# network configuration
+$AUTH rsync ${RSYNC_FLAGS} \
+	${DIR_ETC}/NetworkManager/conf.d/50-random-address.conf \
+	/etc/NetworkManager/conf.d/50-random-address.conf
+$AUTH rsync ${RSYNC_FLAGS} --delete \
+	--include-from="${RSYNC_PATTERN_DIR}/NetworkManager" \
+	${DIR_ETC}/NetworkManager/system-connections/ \
+	/etc/NetworkManager/system-connections/

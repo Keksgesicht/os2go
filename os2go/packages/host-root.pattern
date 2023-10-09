@@ -1,0 +1,7 @@
+- *.log
++ /.bash_history
++ /.bash_profile
++ /.bashrc
++ /.dir_colors
++ /.nanorc
+- /**

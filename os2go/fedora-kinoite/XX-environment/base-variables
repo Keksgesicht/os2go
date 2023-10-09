@@ -1,0 +1,11 @@
+#!/bin/bash
+
+AUTH="sudo"
+
+RSYNC_FLAGS="-avzHAX"
+RSYNC_PATTERN_DIR="${SCRIPT_DIR}/XX-rsync-pattern"
+
+DIR_BACKUP="192.168.178.150::backup"
+DIR_ETC=${DIR_BACKUP}/host-etc
+DIR_HOME=${DIR_BACKUP}/home/keks
+DIR_HOMEDATA=${DIR_BACKUP}/homeBraunJan

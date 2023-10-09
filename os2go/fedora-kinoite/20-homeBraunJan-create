@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# homeBraunJan
+$AUTH mkdir -p /mnt/array/homeBraunJan
+$AUTH chown 1000:1000 /mnt/array/homeBraunJan
+
+# Locations
+mkdir -p /mnt/array/homeBraunJan/Documents
+mkdir -p /mnt/array/homeBraunJan/Downloads
+mkdir -p /mnt/array/homeBraunJan/Music
+mkdir -p /mnt/array/homeBraunJan/Pictures
+mkdir -p /mnt/array/homeBraunJan/Videos
+
+# Pictures
+mkdir -p /mnt/array/homeBraunJan/Pictures/Screenshots
+mkdir -p /mnt/array/homeBraunJan/Pictures/background
+
+# development and git
+mkdir -p /mnt/array/homeBraunJan/Documents/development/git
+ln -s /mnt/array/homeBraunJan/Documents/development/git	/mnt/array/homeBraunJan/git
+ln -s /mnt/array/homeBraunJan/Documents/development		/mnt/array/homeBraunJan/devel
+
+# Studium
+mkdir -p /mnt/array/homeBraunJan/Documents/Studium
+mkdir -p /mnt/array/homeBraunJan/Documents/development/git/Studium
+
+# Nextcloud Sync
+mkdir -p /mnt/array/homeBraunJan/Documents/BackUp/Upload2Cloud
+mkdir -p /mnt/array/homeBraunJan/Documents/Office
+mkdir -p /mnt/array/homeBraunJan/Music/Alarms
